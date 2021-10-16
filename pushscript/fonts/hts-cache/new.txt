@@ -1,0 +1,4 @@
+date	size'/'remotesize	flags(request:Update,Range state:File response:Modified,Chunked,gZipped)	statuscode	status ('servermsg')	MIME	Etag|Date	URL	localfile	(from URL)
+16:46:12	365/365	---M--	301	error ('Moved%20Permanently')	text/html	date:Thu,%2004%20Jun%202020%2011:47:17%20GMT	https://www.bootstrapdash.com/demo/purple/jquery/template/assets/fonts	F:/fonts/www.bootstrapdash.com/demo/purple/jquery/template/assets/fonts.0.delayed	(from )
+16:46:13	178/178	---M--	301	error ('Moved%20Permanently')	text/html	date:Thu,%2004%20Jun%202020%2011:47:17%20GMT	http://www.bootstrapdash.com/demo/purple/jquery/template/assets/fonts/	F:/fonts/www.bootstrapdash.com/demo/purple/jquery/template/assets/fonts/index.html	(from )
+16:46:13	178/178	---M--	301	error ('Moved%20Permanently')	text/html	date:Thu,%2004%20Jun%202020%2011:47:17%20GMT	http://www.bootstrapdash.com/robots.txt		(from )

@@ -1,0 +1,88 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="section">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="PageHeading">Notifications</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="table-1" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Sr#</th>
+                                    <th>Ip</th>
+                                    <th>Title</th>
+                                    <th>Message</th>
+                                    <th>Icon</th>
+                                    <th>Picture</th>
+                                    <th>Created At</th>
+                                    <th>Clicks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Create Functions-->
+<script>
+    $(function () {
+        createTable();
+    });
+    function createTable() {
+        $("#table-1").DataTable().destroy();
+        $("#dataTable").html('');
+        var count =0;
+        db.collection("notifications").orderBy('created_at', 'desc').get().then(function (snapshot) {
+            if (snapshot.size > 0) {
+                $("#dataTable").html('');
+                snapshot.forEach(function (doc) {
+                    count++;
+                    var data = doc.data();
+                    if (data.body.length > 40) {
+                        var message = "<span data-toggle='tooltip' id='check-" + count + "'>" + data.body.substr(0, 40) + "...</span>";
+                    }
+                    else {
+                        var message = data.body;
+                    }
+                    if (data.icon) {
+                        var icon = '<div class="image-link"><a href="' + data.icon + '"><img style="width:30px;height:30px;" src="' + data.icon + '"></a></div>';
+                    }
+                    else {
+                        var icon = "/assets/icon_a.png";
+                    }
+                    if (data.image) {
+                        var image = '<div class="image-link"><a href="' + data.image + '"><img   style="width:30px;height:30px;" src="' + data.image + '"></a></div>';
+                    }
+                    else {
+                        var image = "/assets/icon_a.png";
+                    }
+                    var created_at = data.created_at.toDate();
+                    created_at = $.format.date(created_at, 'd-MMM-yyyy');
+                    var row = '<tr><td>' + count + '</td><td>' + data.ip + '</td><td>' + data.title + '</td><td>' + message + '</td><td>' + icon + '</td><td>' + image + '</td><td>' + created_at+'</td><td>' + data.total_clicks + '</td></tr>';
+                    $('#dataTable').append(row);
+                })
+            }
+            else {
+                TimerSweet('No data!', 'There is no data to show', "info", 2000);
+            }
+        })
+            .then(function () {
+                $("#table-1").dataTable();
+                $(".image-link").lightGallery();
+                $('[data-toggle="tooltip"]').tooltip();
+            })
+            .catch(function (error) {
+                console.log("Error", error);s
+            })
+        
+    }
+</script>
+

@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Push</title>
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="/assets/css/app.min.css">
+    <link rel="stylesheet" href="/assets/bundles/jqvmap/dist/jqvmap.min.css">
+    <link rel="stylesheet" href="/assets/bundles/weather-icon/css/weather-icons.min.css">
+    <link rel="stylesheet" href="/assets/bundles/weather-icon/css/weather-icons-wind.min.css">
+    <link href="~/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/bundles/summernote/summernote-bs4.css">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <!-- Custom style CSS -->
+    <link rel="stylesheet" href="/assets/css/custom.css">
+    <link href="~/assets/bundles/lightgallery/dist/css/lightgallery.css" rel="stylesheet" />
+    <link href="/assets/custom.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- General JS Scripts -->
+    <script src="/assets/js/app.min.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-storage.js"></script>
+    <script src="~/assets/Firebase.js"></script>
+</head>
+<body>
+    <div class="loader"></div>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+            <div class="navbar-bg"></div>
+            <nav class="navbar navbar-expand-lg main-navbar">
+                <div class="form-inline mr-auto">
+                    <ul class="navbar-nav mr-3">
+                        <li>
+                            <a href="#" data-toggle="sidebar" class="nav-link nav-link-lg collapse-btn">
+                                <i data-feather="align-justify"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <ul class="navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown"
+                           class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                            <img alt="image" src="/assets/user11.png" class="user-img-radious-style imageUrl">
+                            <span class="d-sm-none d-lg-inline-block"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right pullDown">
+                            <div id="nav-user-name" class="dropdown-title ">Hello Admin</div>
+                            <div class="dropdown-divider"></div>
+                            <a onclick="logout()" class="dropdown-item has-icon text-danger">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="main-sidebar sidebar-style-2">
+                <aside id="sidebar-wrapper">
+                    <div class="sidebar-brand">
+                        <a style="font-size:12px;" href="@Url.Action("Index","Subscribers")">
+                            Push
+                        </a>
+                    </div>
+                    <div class="sidebar-user">
+                        <div class="sidebar-user-picture">
+                            <img class="imageUrl" src="/assets/user11.png">
+                        </div>
+                        <div class="sidebar-user-details">
+                            <div class="user-role">Admin</div>
+                        </div>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li class="menu-header">Main</li>
+                        <li class="">
+                            <a href="@Url.Action("Index","Subscribers")" class="nav-link">
+                                <i class="fas fa-desktop"></i>
+                                <span>Subscribers</span>
+                            </a>
+                        </li>
+                        <li id="registered_customers">
+                            <a href="@Url.Action("Index","Notifications")" class="nav-link">
+                                <i class="fas fa-users"></i>
+                                <span>Notifications</span>
+                            </a>
+                        </li>
+                        <li id="events">
+                            <a style="cursor:pointer;" onclick="logout()" class="nav-link">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+            <!-- Main Content -->
+            <div class="main-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <!-- JS Libraies -->
+    <!-- Page Specific JS File -->
+    <script src="~/assets/auth-check.js"></script>
+    <!-- Template JS File -->
+    <script src="/assets/js/scripts.js"></script>
+    <script src="~/assets/bundles/datatables/datatables.min.js"></script>
+    <script src="~/assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Custom JS File -->
+    <script src="~/assets/custom.js"></script>
+    <script src="~/assets/jquery-dateFormat.js"></script>
+    <script src="~/assets/logout.js"></script>
+    <script src="~/assets/bundles/lightgallery/dist/js/lightgallery-all.js"></script>
+
+    <script src="/assets/bundles/apexcharts/apexcharts.min.js"></script>
+    <script src="/assets/bundles/amcharts4/core.js"></script>
+    <script src="/assets/bundles/amcharts4/charts.js"></script>
+    <script src="/assets/bundles/amcharts4/animated.js"></script>
+    <script src="/assets/bundles/jquery.sparkline.min.js"></script>
+    <!-- Page Specific JS File -->
+    <script src="/assets/js/page/chart-apexcharts.js"></script>
+</body>
+</html>

@@ -1,0 +1,619 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/assets/bundles/select2/dist/css/select2.min.css" rel="stylesheet" />
+<script src="~/assets/bundles/select2/dist/js/select2.full.min.js"></script>
+<script src="~/assets/bundles/jquery-selectric/jquery.selectric.min.js"></script>
+<style>
+    .select2-container{
+        width:100%!important;
+    }
+    .select2-selection__rendered{
+        line-height:42px!important;
+    }
+</style>
+<section class="section">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="PageHeading">Subscribers</h4>
+                    <div id="SpeechesAdd" class="d-inline mr-2" style="margin:auto;">
+                        <button class="btn btn-primary" onclick="showCountryModal()" type="button">
+                            Send Custom Notification
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="table-1" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Ip</th>
+                                    <th>Source</th>
+                                    <th>Country</th>
+                                    <th>City</th>
+                                    <th>Region</th>
+                                    <th>Send Notification</th>
+                                    <th>Browser</th>
+                                    <th>Os</th>
+                                    <th>Platform</th>
+                                    <th>Carrier</th>
+                                    <th>Created At</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Reset Password Modal-->
+<div class="modal fade" id="sendNotification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Send Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="Form">
+                <div class="modal-body">
+                    <div class="row">
+                        <input type="hidden" id="fcm_token" name="fcm_token" value="" />
+                        <input type="hidden" id="ip" name="ip" value="" />
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" placeholder="Enter Title" id="title" name="title" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Message</label>
+                                <input type="text" class="form-control" placeholder="Enter Message" id="message" name="message" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Click Url</label>
+                                <input type="text" class="form-control" placeholder="Enter Url" id="url" name="url" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Icon</label>
+                                <input type="file" class="form-control" id="icon" name="icon" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Picture</label>
+                                <input type="file" class="form-control" id="image" name="image" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- row starts -->
+                <div class="progress full" id="progess_section" style="display: none;margin-bottom:10px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar" id="bar" data-width="0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">0%</div>
+                </div>
+                <!-- row ends -->
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" id="send_btn" class="btn btn-success" onclick="SendNotification()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="countryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Send Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="Form2">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <select class="form-control select2 " id="country">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Source</label>
+                                <select class="form-control select2" id="source">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>OS</label>
+                                <select class="form-control select2" id="os">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Device</label>
+                                <select class="form-control select2" id="device">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Browser
+                                </label>
+                                <select class="form-control select2" id="browser">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Language
+                                </label>
+                                <select class="form-control select2" id="language">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>
+                                    Carrier
+                                </label>
+                                <select class="form-control select2" id="carrier">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" placeholder="Enter Title" id="title2" name="title" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Click Url</label>
+                                <input type="text" class="form-control" placeholder="Enter Url" id="url2" name="url" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Message</label>
+                                <input type="text" class="form-control" placeholder="Enter Message" id="message2" name="message" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Icon</label>
+                                <input type="file" class="form-control" id="icon2" name="icon" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Picture</label>
+                                <input type="file" class="form-control" id="image2" name="image" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- row starts -->
+                <div class="progress full" id="progess_section2" style="display: none;margin-bottom:10px;">
+                    <div class="progress-bar progress-bar-info" role="progressbar" id="bar2" data-width="0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">0%</div>
+                </div>
+                <!-- row ends -->
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" id="send_btn2" class="btn btn-success" onclick="SendNotificationToCountry()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<input type="hidden" value="" id="docId" />
+<input type="hidden" id="fcm" value="" />
+<a onclick="redirect_blank()">button</a>
+<script>
+    $(function () {
+        createTable();
+    });
+    function createTable() {
+        $("#table-1").DataTable().destroy();
+        $("#dataTable").html('');
+        db.collection("subscribers").orderBy('created_at', 'desc').get().then(function (snapshot) {
+            if (snapshot.size > 0) {
+                $("#dataTable").html('');
+                snapshot.forEach(function (doc) {
+                    var data = doc.data();
+                    var created_at = data.created_at.toDate();
+                    created_at = $.format.date(created_at, 'd-MMM-yyyy');
+                    var action = '<a style="color: #fff;cursor:pointer;" onclick="showSendNotificationModal(\'' + data.fcm_token + '\',\'' + data.query + '\')" class="btn btn-primary badge-shadow">Send Notification</a>';
+                    var row = '<tr> <td>' + data.query + '</td><td>' + data.origin_url + '</td><td>' + data.country + '</td><td>' + data.city + '</td><td>' + data.region + '</td><td class="">' + action + '</td><td>' + data.browser + '</td><td>' + data.os + '</td><td>' + data.device + '</td><td>' + data.isp + '</td><td>' + created_at + '</td></tr>';
+                    $('#dataTable').append(row);
+                })
+            }
+            else {
+                TimerSweet('No data!', 'There is no data to show', "info", 2000);
+            }
+        })
+            .then(function () {
+                $("#table-1").dataTable();
+            })
+            .catch(function (error) {
+                console.log("Error", error);
+            })
+    }
+    function showSendNotificationModal(fcm, ip) {
+        $('#sendNotification').modal("show");
+        $('#fcm_token').val(fcm);
+        $('#ip').val(ip);
+    }
+    
+</script>
+<script>
+    function SendNotification() {
+        $('#send_btn').addClass('btn-progress');
+        $("#progess_section").show();
+        var file = $("#icon").get(0).files[0];
+        var name = (+new Date()) + '-' + file.name;
+        var metadata = { contentType: file.type };
+        var fileName = name;
+        var storageRef = firebase.storage();
+        var task = storageRef.ref('Users/' + name).put(file, metadata);
+        task.on('state_changed',
+            function progress(snapshot) {
+                var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                var fixval = percentage.toFixed(0);
+                fixval = parseInt(fixval) / 2;
+                $("#bar").html(fixval + "%");
+                percentage = percentage / 2;
+                $("#bar").css('width', percentage + '%').attr('aria-valuenow', percentage);
+            },
+            function error(err) {
+                sweetMessage("Warning", err.message, "error");
+            },
+            function complete() {
+                task.snapshot.ref.getDownloadURL()
+                    .then(function (downloadURL) {
+                        var short_reference = storageRef.refFromURL(downloadURL);
+                        var file2 = $("#image").get(0).files[0];
+                        var name2 = (+new Date()) + '-' + file2.name;
+                        var metadata2 = { contentType: file2.type };
+                        var task2 = storageRef.ref('Users/' + name2).put(file2, metadata2);
+                        task2.on('state_changed',
+                            function progress(snapshot) {
+                                var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                var fixval = percentage.toFixed(0);
+                                fixval = parseInt(fixval) / 2;
+                                fixval = parseInt(fixval) + 50;
+                                $("#bar").html(fixval + "%");
+                                percentage = percentage / 2;
+                                percentage = percentage + 50;
+                                $("#bar").css('width', percentage + '%').attr('aria-valuenow', percentage);
+                            },
+                            function error(err) {
+                                sweetMessage("Warning", err.message, "error");
+                            },
+                            function complete() {
+                                task2.snapshot.ref.getDownloadURL()
+                                    .then(function (downloadURL2) {
+                                        var short_reference = storageRef.refFromURL(downloadURL2);
+                                        $("#progess_section").hide();
+                                        $("#bar").html(0 + "%");
+                                        $("#bar").css('width', 0 + '%').attr('aria-valuenow', 0);
+                                        var form = new FormData(document.getElementById('Form'));
+                                        form.append("image1", downloadURL);
+                                        form.append("image2", downloadURL2);
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '@Url.Action("SendMessageToClient", "Subscribers")',
+                                            data: form,
+                                            async: true,
+                                            processData: false,
+                                            contentType: false,
+                                            success: function (response) {
+                                                if (response != 'false') {
+                                                    TimerSweet("Notification Sent!", 'Notification is sent successfully', "success", 2000);
+                                                    db.collection("notifications").doc(response.toString()).set({
+                                                        device: $('#fcm_token').val(),
+                                                        body: $('#message').val(),
+                                                        title: $('#title').val(),
+                                                        click_action: $('#url').val(),
+                                                        icon: downloadURL,
+                                                        image: downloadURL2,
+                                                        ip: $('#ip').val(),
+                                                        total_clicks: 0,
+                                                        created_at: new Date(),
+                                                    })
+                                                        .then(function () {
+                                                            $('#send_btn').removeClass('btn-progress');
+                                                            $('#sendNotification').modal("hide");
+                                                        })
+                                                        .catch(function (e) {
+                                                            console.log("Errror", e);
+                                                            sweetMessage("Error!", e, "error");
+                                                        })
+                                                }
+                                                else {
+                                                    console.log("Errror", response);
+                                                    sweetMessage("Error!", "Some error", "error");
+                                                }
+                                            },
+                                            error: function (error) {
+                                                return error;
+                                            },
+                                        });
+                                    });
+                            });
+                    });
+            });
+    }
+</script>
+<script>
+    function showCountryModal() {
+        $('#country').html('');
+        $('#carrier').html('');
+        $('#language').html('');
+        $('#browser').html('');
+        $('#device').html('');
+        $('#os').html('');
+        $('#source').html('');
+
+        db.collection("targets").get()
+            .then(function (querySnapshot) {
+                if (querySnapshot.size > 0) {
+                    $('.select2').append('<option value="All">All</option>');
+                    querySnapshot.forEach(function (doc) {
+                        var data = doc.data();
+                        if (data.type == "browser") {
+                            $('#browser').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "country") {
+                            $('#country').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "browser") {
+                            $('#browser').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "language") {
+                            $('#language').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "carrier") {
+                            $('#carrier').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "device") {
+                            $('#device').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "os") {
+                            $('#os').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                        else if (data.type == "source") {
+                            $('#source').append('<option value="' + doc.id + '">' + doc.id + '</option>');
+                        }
+                    })
+                }
+            })
+            .then(function () {
+                $('.select2').select2();
+                $('#countryModal').modal("show");
+            })
+            .catch(function (error) {
+                console.log("Error", error);
+            });
+    }
+    function SendNotificationToCountry() {
+        var temp = "";
+        var devices = [];
+        var count = 0;
+        var subscribersFiler = db.collection("subscribers");
+        var country = $('#country').val();
+        var carrier = $('#carrier').val();
+        var language = $('#language').val();
+        var browser = $('#browser').val();
+        var device = $('#device').val();
+        var os = $('#os').val();
+        var source = $('#source').val();
+        if (country != "All") {
+            var country = subscribersFiler.where("country", "==", country);
+        }
+        else {
+            var country = subscribersFiler;
+        }
+        if (carrier != "All") {
+            var carrier = country.where("isp", "==", carrier);
+        }
+        else {
+            var carrier = country;
+        }
+        if (language != "All") {
+            var language = carrier.where("language", "==", language);
+        }
+        else {
+            var language = carrier;
+        }
+        if (browser != "All") {
+            var browser = language.where("browser", "==", browser);
+        }
+        else {
+            var browser = language;
+        }
+        if (device != "All") {
+            var device = browser.where("device", "==", device);
+        }
+        else {
+            var device = browser;
+        }
+        if (os != "All") {
+            var os = device.where("os", "==", os);
+        }
+        else {
+            var os = device;
+        }
+        if (source != "All") {
+            var source = os.where("origin_url", "==", source);
+        }
+        else {
+            var source = os;
+        }
+        source.get()
+            .then(function (snapshot) {
+                snapshot.forEach(function (doc) {
+                    var data = doc.data();
+                    if (count == 0) {
+                        temp = data.fcm_token;
+                    }
+                    else {
+                        temp = temp + "," + data.fcm_token;
+                    }
+                    devices.push(data.fcm_token);
+                    count++;
+                })
+            })
+            .then(function () {
+                console.log(devices);
+                sendFunction(temp, devices);
+            })
+            .catch(function (error) {
+                console.log("Error", error);
+            })
+    }
+    function sendFunction(temp, devices) {
+        $('#send_btn2').addClass('btn-progress');
+        $("#progess_section2").show();
+        var file = $("#icon2").get(0).files[0];
+        var name = (+new Date()) + '-' + file.name;
+        var metadata = { contentType: file.type };
+        var fileName = name;
+        var storageRef = firebase.storage();
+        var task = storageRef.ref('Users/' + name).put(file, metadata);
+        task.on('state_changed',
+            function progress(snapshot) {
+                var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                var fixval = percentage.toFixed(0);
+                fixval = parseInt(fixval) / 2;
+                $("#bar2").html(fixval + "%");
+                percentage = percentage / 2;
+                $("#bar2").css('width', percentage + '%').attr('aria-valuenow', percentage);
+            },
+            function error(err) {
+                sweetMessage("Warning", err.message, "error");
+            },
+            function complete() {
+                task.snapshot.ref.getDownloadURL()
+                    .then(function (downloadURL) {
+                        var short_reference = storageRef.refFromURL(downloadURL);
+                        var file2 = $("#image2").get(0).files[0];
+                        var name2 = (+new Date()) + '-' + file2.name;
+                        var metadata2 = { contentType: file2.type };
+                        var task2 = storageRef.ref('Users/' + name2).put(file2, metadata2);
+                        task2.on('state_changed',
+                            function progress(snapshot) {
+                                var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                var fixval = percentage.toFixed(0);
+                                fixval = parseInt(fixval) / 2;
+                                fixval = parseInt(fixval) + 50;
+                                $("#bar2").html(fixval + "%");
+                                percentage = percentage / 2;
+                                percentage = percentage + 50;
+                                $("#bar2").css('width', percentage + '%').attr('aria-valuenow', percentage);
+                            },
+                            function error(err) {
+                                sweetMessage("Warning", err.message, "error");
+                            },
+                            function complete() {
+                                task2.snapshot.ref.getDownloadURL()
+                                    .then(function (downloadURL2) {
+                                        var short_reference = storageRef.refFromURL(downloadURL2);
+                                        $("#progess_section2").hide();
+                                        $("#bar2").html(0 + "%");
+                                        $("#bar2").css('width', 0 + '%').attr('aria-valuenow', 0);
+                                        var form = new FormData(document.getElementById('Form2'));
+                                        form.append("image1", downloadURL);
+                                        form.append("image2", downloadURL2);
+                                        form.append("fcm_tokens", temp);
+                                        temp
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '@Url.Action("SendMessageToClient2", "Subscribers")',
+                                            data: form,
+                                            async: true,
+                                            processData: false,
+                                            contentType: false,
+                                            success: function (response) {
+                                                if (response != 'false') {
+                                                    TimerSweet("Notification Sent!", 'Notification is sent successfully', "success", 2000);
+                                                    db.collection("notifications").doc(response.toString()).set({
+                                                        body: $('#message2').val(),
+                                                        title: $('#title2').val(),
+                                                        click_action: $('#url2').val(),
+                                                        icon: downloadURL,
+                                                        image: downloadURL2,
+                                                        ip: "Filtered",
+                                                        devices: devices,
+                                                        total_clicks: 0,
+                                                        created_at: new Date(),
+                                                    })
+                                                        .then(function () {
+                                                            $('#send_btn2').removeClass('btn-progress');
+                                                            $('#countryModal').modal("hide");
+                                                        })
+                                                        .catch(function (e) {
+                                                            console.log("Errror", e);
+                                                            sweetMessage("Error!", e, "error");
+                                                        })
+                                                }
+                                                else {
+                                                    console.log("Errror", response);
+                                                    sweetMessage("Error!", "some error", "error");
+                                                }
+                                            },
+                                            error: function (error) {
+                                                return error;
+                                            },
+                                        });
+                                    });
+                            });
+                    });
+            });
+    }
+</script>
+<script>
+    $('#Form').submit(function (e) {
+        e.preventDefault();
+    })
+    $('#Form2').submit(function (e) {
+        e.preventDefault();
+    })
+</script>
+<!--Ajax-->
+<script>
+    var getResponseFromUrl = function (requestType, requestUrl, requestData, aysnc) {
+        var response;
+        $.ajax({
+            type: requestType,
+            url: requestUrl,
+            data: requestData,
+            async: aysnc,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                response = data;
+            },
+            error: function (error) {
+                return error;
+            },
+        });
+        return response;
+    }
+</script>
