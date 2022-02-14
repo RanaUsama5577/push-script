@@ -33,7 +33,7 @@ namespace pushscript.Controllers
             try
             {
                 // Get this from your Firebase Developer Console Login  
-                string serverApiKey = "AAAAqNq_sx4:APA91bE5klpC1lXOJHspPCQREkCkodp4eIBnuITQsyM3B8avp-cQYjwfbl9IU50soyUMfCNkiLjm1zreSUxAl-f3DDjFQtdzmx5QZHLCTWE2a7HWk0izKVBDWcFTyRCy9xPlGVH2OOYr";
+                string serverApiKey = "";
                 string apiEndpoint = "https://fcm.googleapis.com/fcm/send";
                 using (httpClient = new HttpClient())
                 {
@@ -89,7 +89,7 @@ namespace pushscript.Controllers
                     vs.Add(i);
                 }
                 // Get this from your Firebase Developer Console Login  
-                string serverApiKey = "AAAAqNq_sx4:APA91bE5klpC1lXOJHspPCQREkCkodp4eIBnuITQsyM3B8avp-cQYjwfbl9IU50soyUMfCNkiLjm1zreSUxAl-f3DDjFQtdzmx5QZHLCTWE2a7HWk0izKVBDWcFTyRCy9xPlGVH2OOYr";
+                string serverApiKey = "";
                 string apiEndpoint = "https://fcm.googleapis.com/fcm/send";
                 using (httpClient = new HttpClient())
                 {
